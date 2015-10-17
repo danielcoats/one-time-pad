@@ -33,6 +33,6 @@
     tour.init();
 
     // Start the tour
-    tour.start();
+    // tour.start();
 
 }());

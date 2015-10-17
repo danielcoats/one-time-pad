@@ -3,6 +3,9 @@ $(document).ready(function(){
 	const Z			= 90; // ASCII value for Z
 	const CHARSET	= 26; // Length of Alphabet
 
+	var map = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+			   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
 	/**
 	 *	Cleanse Text
 	 *
@@ -58,7 +61,7 @@ $(document).ready(function(){
 
 		//-- If key is too short, warn user --
 		if((msg.length > key.length)){
-			alert('Key must be at least as long as message.');
+			alert('Invalid Key');
 			return true;
 		}
 
@@ -76,9 +79,19 @@ $(document).ready(function(){
 
 		//-- Generate secret key with same length as message --
 		for(var i = 0; i < txt.length; i++)
-			key	+= String.fromCharCode(Math.floor(Math.random() * CHARSET) + A);
+			key	+= map[Math.floor(Math.random() * 26)];
 
 		return key;
+	}
+
+	/**
+	 *	Better modulo
+	 *
+	 *	@param n, m			Ints to mod
+	 *	@return				Result of modulo
+	 */
+	function mod(n, m) {
+        return ((n % m) + m) % m;
 	}
 
 	//-- Only Allow Letters To Be Typed --
@@ -91,6 +104,7 @@ $(document).ready(function(){
 		var msg	= cleanseText($('#input').val());
 		var key	= cleanseText($('#key').val());
 		var out	= '';
+		var outPut = [];
 
 		//-- Encrypt Input --
 		if(btn == 'encrypt'){
@@ -100,23 +114,36 @@ $(document).ready(function(){
 
 			//-- Check for errors --
 			if(!detectErrors(msg, key, btn)){
-				//-- Encrypt msg with key --
-				for(var i = 0; i < msg.length; i++){
-					var msgTmp	= msg[i].charCodeAt();
-					var keyTmp	= key[i].charCodeAt();
-					var tmp		= msgTmp + keyTmp - (A - 1);
+					//-- Encrypt msg with key --
+					for(var i = 0; i < msg.length; i++){
+						var msgTmp	= map.indexOf(msg[i]);
+						var keyTmp	= map.indexOf(key[i]);
+						var tmp		= (msgTmp + keyTmp) % 26;
 
-					//-- Roll over if value passes Z --
-					if(tmp > Z)
-						tmp	-= CHARSET;
+						outPut.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\r');
+						out += map[tmp];
+					}
 
-					out += String.fromCharCode(tmp);
-				}
+				//-- Show process --
+				var counter = 0;
+			    var toConsole = function() {
+			        $('#output').append(outPut[counter++]);
+					var textarea = document.getElementById('output');
+					textarea.scrollTop = textarea.scrollHeight;
 
-				//-- Display output(s) --
-				$('#input').val(formatText(msg));
-				$('#key').val(formatText(key));
-				$('#output').val(formatText(out));
+			        if (counter < outPut.length) {
+			            setTimeout(toConsole, 500);
+			        }
+			    };
+			    toConsole();
+
+				//-- Display output --
+				$('#input').val(msg);
+				$('#key').val(key);
+				setTimeout(function() {
+					$('#output').append(out + '\n');
+				}, 500 * outPut.length);
+
 			}
 		}
 
@@ -127,27 +154,38 @@ $(document).ready(function(){
 				//-- Decrypt msg with key --
 				for(var i = 0; i < msg.length; i++)
 				{
-					var msgTmp	= msg[i].charCodeAt();
-					var keyTmp	= key[i].charCodeAt();
-					var tmp		= msgTmp - keyTmp + (A - 1);
+					var msgTmp	= map.indexOf(msg[i]);
+					var keyTmp	= map.indexOf(key[i]);
+					var tmp		= mod(msgTmp - keyTmp, 26);
 
-					//-- Roll over if value passes A --
-					if(tmp < A)
-						tmp	+= CHARSET;
-
-					out += String.fromCharCode(tmp);
+					outPut.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\n');
+					out += map[tmp];
 				}
 
-				//-- Display output(s) --
-				$('#input').val(formatText(msg));
-				$('#key').val(formatText(key));
-				$('#output').val(formatText(out));
+				//-- Show process --
+				var counter = 0;
+			    var toConsole = function() {
+			        $('#output').append(outPut[counter++]);
+					var textarea = document.getElementById('output');
+					textarea.scrollTop = textarea.scrollHeight;
+			        if (counter < outPut.length) {
+			            setTimeout(toConsole, 500);
+			        }
+			    };
+			    toConsole();
+
+				//-- Display output --
+				$('#input').val(msg);
+				$('#key').val(key);
+				setTimeout(function() {
+					$('#output').append(out + '\n');
+				}, 500 * outPut.length);
 			}
 		}
 	});
 
 	//-- Reset Fields --
 	$('#reset').click(function(){
-		$('textarea').val('');
+		$('.output').html('<textarea class="form-control" id="output" name="output" rows="5" readonly></textarea>');
 	});
 });

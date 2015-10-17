@@ -11,6 +11,9 @@
 
     <title>One-Time Pad</title>
 
+    <!-- Custom fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
     <!-- Bootstrap core CSS -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -44,28 +47,28 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <!-- <div class="jumbotron">
-            <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-lg btn-success tour-step tour-step-one" href="#" role="button">Begin Tour</a></p>
-        </div> -->
+        <p class="lead">The One-Time Pad is a method of <a href="#" data-toggle="tooltip" title="A way of processing a message so that only people with the secret key can read it.">encryption</a> and the only known perfect <a href="#" data-toggle="tooltip" title="An algorithm, or series of steps, for encrypting a message.">cipher</a>. If used correctly, a message encrypted using the One-Time Pad is impossible to crack.</p>
+
         <div id="capsule" class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">One-Time Pad</h3>
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <label for="input">Input</label>
-                    <textarea class="form-control" id="input" name="input"></textarea>
+                    <label for="input">Message</label>
+                    <input type="text" class="form-control" id="input" name="input">
                 </div>
 
                 <div class="form-group">
-                    <label for="key">Key</label>
-                    <textarea class="form-control" id="key" name="key"></textarea>
+                    <label for="key">Secret Key</label>
+                    <input type="text" class="form-control" id="key" name="key">
                 </div>
 
                 <div class="form-group">
                     <label for="output">Output</label>
-                    <textarea class="form-control" id="output" name="output" readonly></textarea>
+                    <div class="output">
+                        <textarea class="form-control" id="output" name="output" rows="5" readonly></textarea>
+                    </div>
                 </div>
 
                 <div class="btn-group" role="group">
@@ -75,6 +78,35 @@
                 <button id="reset" class="btn btn-warning pull-right" type="button">Reset</button>
             </div>
         </div>
+
+        <h3>Rules</h3>
+
+        <ul>
+            <li>The key must be at least as long as the message that you want to send.</li>
+            <li>Each key must be used only once, and must be destroyed after use.</li>
+            <li>Only the sender and receiver may have a copy of the key.</li>
+            <li>The key must be truly random.</li>
+        </ul>
+        <hr>
+        <h3>How it works</h3>
+        <h4>Enciphering</h4>
+        <ol>
+            <li>Take a secret message. For example, <code>SECRETCODE</code>.</li>
+            <li>Assign a number to each letter of the alphabet. For example, <code>A = 0, B = 1 &hellip; Z = 25</code>.</li>
+            <li>Turn your secret message into ASCII digits, For example, 83 69 67 82 69 84 67 79 68 69.</li>
+            <li>Create your random key, which is at least as long as your message, for example, EQUHESEVZO, and convert it to ASCII, 69 81 85 72 69 83 69 86 90 79.</li>
+            <li>Now add each ASCII code in your secret message to the corresponding ASCII code in your key and subtract 64. If the result is greater than 90, then subtract 26. For example, S + E = 83 + 69 - 64 = 88 = X. Enciphering SECRETCODE with the key EQUHESEVZO gives XVXZJMHKDT, the cipher.</li>
+            <li>Send the cipher, and the cipher only, to your friend, who must already know the secret key.</li>
+        </ol>
+        <h4>Deciphering</h4>
+        <ol>
+            <li>Take a secret message. For example, <code>SECRETCODE</code>.</li>
+            <li>Assign a number to each letter of the alphabet. For example, <code>A = 0, B = 1 &hellip; Z = 25</code>.</li>
+            <li>Turn your secret message into ASCII digits, For example, 83 69 67 82 69 84 67 79 68 69.</li>
+            <li>Create your random key, which is at least as long as your message, for example, EQUHESEVZO, and convert it to ASCII, 69 81 85 72 69 83 69 86 90 79.</li>
+            <li>Now add each ASCII code in your secret message to the corresponding ASCII code in your key and subtract 64. If the result is greater than 90, then subtract 26. For example, S + E = 83 + 69 - 64 = 88 = X. Enciphering SECRETCODE with the key EQUHESEVZO gives XVXZJMHKDT, the cipher.</li>
+            <li>Send the cipher, and the cipher only, to your friend, who must already know the secret key.</li>
+        </ol>
     </div>
 </div>
 
@@ -88,12 +120,19 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap plugins -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- One Time Pad script (https://github.com/karai17/One-Time-Pad) -->
+<!-- One Time Pad script -->
 <script src="includes/One-Time-Pad.js"></script>
 <script src="includes/jquery.alphanumeric.pack.js"></script>
 <!-- Bootstrap Tour plugin -->
 <script src="bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
 <script src="includes/tour.js"></script>
-
+<!-- Custom JS -->
+<script src="includes/script.js"></script>
+<!-- Initialize tooltip plugin -->
+<script>
+    $('[data-toggle=tooltip]').tooltip();
+</script>
+<!-- Typed.js plugin -->
+<script src="includes/typed.min.js"></script>
 </body>
 </html>

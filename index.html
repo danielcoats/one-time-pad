@@ -47,7 +47,7 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <p class="lead">The One-Time Pad is a method of <a href="#" data-toggle="tooltip" title="A way of processing a message so that only people with the secret key can read it.">encryption</a> and the only known perfect <a href="#" data-toggle="tooltip" title="An algorithm, or series of steps, for encrypting a message.">cipher</a>. If used correctly, a message encrypted using the One-Time Pad is impossible to crack.</p>
+        <p class="lead">The One-Time Pad is a method of <a href="#" data-toggle="popover" data-content="A way of processing a message so that only people with the secret key can read it.">encryption</a> and the only known perfect <a href="#" data-toggle="popover" data-content="An algorithm, or series of steps, for encrypting a message.">cipher</a>. If used correctly, a message encrypted using the One-Time Pad is impossible to crack.</p>
 
         <div id="capsule" class="panel panel-default">
             <div class="panel-heading">
@@ -130,7 +130,9 @@
 <script src="includes/script.js"></script>
 <!-- Initialize tooltip plugin -->
 <script>
-    $('[data-toggle=tooltip]').tooltip();
+    $('[data-toggle="popover"]').popover({
+        'trigger': 'hover'
+    });
 </script>
 <!-- Typed.js plugin -->
 <script src="includes/typed.min.js"></script>

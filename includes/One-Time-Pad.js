@@ -97,7 +97,7 @@ $(document).ready(function(){
 						var keyTmp	= map.indexOf(key[i]);
 						var tmp		= (msgTmp + keyTmp) % 26;
 
-						outArray.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\r');
+						outArray.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' mod ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\r');
 						out += map[tmp];
 					}
 
@@ -139,7 +139,7 @@ $(document).ready(function(){
 					var keyTmp	= map.indexOf(key[i]);
 					var tmp		= mod(msgTmp - keyTmp, 26);
 
-					outArray.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\n');
+					outArray.push('(' + msgTmp + ' - ' + keyTmp + ')' + ' mod ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\n');
 					out += map[tmp];
 				}
 
@@ -175,5 +175,5 @@ $(document).ready(function(){
 		$('.output').html('<textarea class="form-control" id="output" name="output" rows="5" readonly></textarea>');
 		$('input').val('');
 	});
-	
+
 });

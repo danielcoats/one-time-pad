@@ -1,7 +1,4 @@
 $(document).ready(function(){
-	const A			= 65; // ASCII value for A
-	const Z			= 90; // ASCII value for Z
-	const CHARSET	= 26; // Length of Alphabet
 
 	var map = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 			   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -15,26 +12,6 @@ $(document).ready(function(){
 	function cleanseText(txt){
 		txt = txt.toUpperCase();
 		return txt.replace(/[^a-z]+/gi, '');
-	}
-
-	/**
-	 *	Format Text
-	 *
-	 *	@param txt			Text to format
-	 *	@return				Formatted text
-	 */
-	function formatText(txt){
-		var tmp	= '';
-
-		//-- Separate string into groups of 5 letters --
-		for(var i = 0; i < txt.length; i++){
-			tmp += txt[i];
-
-			if(i % 5 == 4)
-				tmp += ' ';
-		}
-
-		return tmp;
 	}
 
 	/**
@@ -61,7 +38,7 @@ $(document).ready(function(){
 
 		//-- If key is too short, warn user --
 		if((msg.length > key.length)){
-			alert('Invalid Key');
+			alert('Invalid Key. Key must be at least as long as the message.');
 			return true;
 		}
 
@@ -85,10 +62,10 @@ $(document).ready(function(){
 	}
 
 	/**
-	 *	Better modulo
+	 *	Better modulus
 	 *
-	 *	@param n, m			Ints to mod
-	 *	@return				Result of modulo
+	 *	@param n, m			Integers
+	 *	@return				Result of modulus
 	 */
 	function mod(n, m) {
         return ((n % m) + m) % m;
@@ -104,7 +81,7 @@ $(document).ready(function(){
 		var msg	= cleanseText($('#input').val());
 		var key	= cleanseText($('#key').val());
 		var out	= '';
-		var outPut = [];
+		var outArray = [];
 
 		//-- Encrypt Input --
 		if(btn == 'encrypt'){
@@ -120,18 +97,20 @@ $(document).ready(function(){
 						var keyTmp	= map.indexOf(key[i]);
 						var tmp		= (msgTmp + keyTmp) % 26;
 
-						outPut.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\r');
+						outArray.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\r');
 						out += map[tmp];
 					}
 
-				//-- Show process --
+				//-- Show process of enciphering --
 				var counter = 0;
 			    var toConsole = function() {
-			        $('#output').append(outPut[counter++]);
+			        $('#output').append(outArray[counter++]);
+
+					//-- Scroll to bottom of output --
 					var textarea = document.getElementById('output');
 					textarea.scrollTop = textarea.scrollHeight;
 
-			        if (counter < outPut.length) {
+			        if (counter < outArray.length) {
 			            setTimeout(toConsole, 500);
 			        }
 			    };
@@ -140,9 +119,11 @@ $(document).ready(function(){
 				//-- Display output --
 				$('#input').val(msg);
 				$('#key').val(key);
+
+				//-- Delay until all steps have been output --
 				setTimeout(function() {
 					$('#output').append(out + '\n');
-				}, 500 * outPut.length);
+				}, 500 * outArray.length);
 
 			}
 		}
@@ -158,17 +139,20 @@ $(document).ready(function(){
 					var keyTmp	= map.indexOf(key[i]);
 					var tmp		= mod(msgTmp - keyTmp, 26);
 
-					outPut.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\n');
+					outArray.push('(' + msgTmp + ' + ' + keyTmp + ')' + ' % ' + 26 + ' = ' + tmp + " => " + map[tmp] + '\n');
 					out += map[tmp];
 				}
 
-				//-- Show process --
+				//-- Show process of deciphering --
 				var counter = 0;
 			    var toConsole = function() {
-			        $('#output').append(outPut[counter++]);
+			        $('#output').append(outArray[counter++]);
+
+					//-- Scroll to bottom of output --
 					var textarea = document.getElementById('output');
 					textarea.scrollTop = textarea.scrollHeight;
-			        if (counter < outPut.length) {
+
+			        if (counter < outArray.length) {
 			            setTimeout(toConsole, 500);
 			        }
 			    };
@@ -177,9 +161,11 @@ $(document).ready(function(){
 				//-- Display output --
 				$('#input').val(msg);
 				$('#key').val(key);
+
+				//-- Delay until all steps have been output --
 				setTimeout(function() {
 					$('#output').append(out + '\n');
-				}, 500 * outPut.length);
+				}, 500 * outArray.length);
 			}
 		}
 	});
@@ -187,5 +173,7 @@ $(document).ready(function(){
 	//-- Reset Fields --
 	$('#reset').click(function(){
 		$('.output').html('<textarea class="form-control" id="output" name="output" rows="5" readonly></textarea>');
+		$('input').val('');
 	});
+	
 });
